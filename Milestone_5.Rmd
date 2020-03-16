@@ -5,6 +5,7 @@ date: "3/16/2020"
 output: pdf_document
 ---
 
+\fontsize{10}{18}
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -37,6 +38,7 @@ The first step to understanding the data analysis performed in the following rep
 [^2]: Franco Galdini, “Kyrgyzstan Violence: Four Years On,” July 1, 2014, https://www.aljazeera.com/indepth/opinion/2014/06/kyrgyzstan-violence-2010-201463016460195835.html.
 
 \hfill\break
+
 ```{r Step 1,  include=FALSE}
 
 # I want to grab some Uzbek data
@@ -148,7 +150,7 @@ table_data2 <- data.frame(trial, table_data) %>%
               placement = "right",
               locale = NULL) %>%
   tab_header(
-    title = "Table 1: Survey Data",
+    title = "Table 1: Summar of Survey Data",
     subtitle = "Separated between Uzbeks and Kyrgyz"
   ) %>%
   cols_align(align = c("center"), columns = TRUE)
@@ -192,10 +194,185 @@ Review 113, no. 4 (2019): 1029–44.
  Appendix
 \end{center}
 
+```{r Starting}
 
-dklasnddk
+# This seems like they're just shifting the
+# data they want to use later by making certain
+# columns integers, specifically the affected 
+# and prisoner dilemma columns. Oh and the affected
+# - 1 bit is to shift the binary from 1 and 0s to
+# 0 and -1s. 
 
-```{r}
-table_data2
+data$affected <- as.integer(data$affected)
+data$affected <- data$affected - 1
+data$pd_in <- as.integer(data$pd_in)
+data$pd_out <- as.integer(data$pd_out)
 ```
+
+```{r Subset}
+
+# here they just want to grab their data for Uzbeks
+# as opposed to including the data for thier Kyrgyz 
+# respondents. 
+
+data_uzbek <- data[which(data$ethnicity=="Uzbek"),]
+```
+
+```{r Scaling Time}
+
+# Alright I had to find out what scale() does, but
+# apparently its a way of standardizing a bunch of 
+# data. The specifics are lost on my but the authors are 
+# scaling so that they can run regressions on the various 
+# in and out groups for the prisonners dilemma and dictator 
+# game results. They are also making an overall cooperation
+# index variable for later graphing, which they want to be 
+# on one standard scale, hence the scaling. 
+
+data_uzbek$pd_in_scale <- scale(data_uzbek$pd_in)
+data_uzbek$dg_in_scale <- scale(data_uzbek$dg_in)
+data_uzbek$pd_out_scale <- scale(data_uzbek$pd_out)
+data_uzbek$dg_out_scale <- scale(data_uzbek$dg_out)
+data_uzbek$cooperation_index <- rowSums(cbind(data_uzbek$pd_in_scale, 
+                                              data_uzbek$dg_in_scale, 
+                                              data_uzbek$pd_out_scale, 
+                                              data_uzbek$dg_out_scale), na.rm=T)/4
+```
+
+```{r Regressions}
+
+# Alright I totally understand what's happening here. 
+# They are just running an OLS regression on the variables
+# that they made and scaled in the last step and trying
+# to see the effect that the affected variable had on each
+# of them in turn. 
+
+model1 <- lm(pd_in_scale ~ affected, data=data_uzbek)
+model2 <- lm(dg_in_scale ~ affected, data=data_uzbek)
+model3 <- lm(pd_out_scale ~ affected, data=data_uzbek)
+model4 <- lm(dg_out_scale ~ affected, data=data_uzbek)
+model5 <- lm(cooperation_index ~ affected, data=data_uzbek)
+```
+
+                                          
+```{r Regression Extraction}
+
+# This all makes sense too. After running the regressions 
+# the authors have 5 list type data, but they need to extract 
+# the information that they want. It's kinda weird but I see that 
+# using this code they are getting the Variable, Coefficient, 
+# standard error, and name of test for each model. Cool. 
+
+model1Frame <- data.frame(Variable = rownames(summary(model1)$coef),
+                          Coefficient = summary(model1)$coef[, 1],
+                          SE = summary(model1)$coef[, 2],
+                          modelName = "Prisoner's Dilemma ingroup")[2,]
+model2Frame <- data.frame(Variable = rownames(summary(model2)$coef),
+                          Coefficient = summary(model2)$coef[, 1],
+                          SE = summary(model2)$coef[, 2],
+                          modelName = "Dictator Game ingroup")[2,]
+model3Frame <- data.frame(Variable = rownames(summary(model3)$coef),
+                          Coefficient = summary(model3)$coef[, 1],
+                          SE = summary(model3)$coef[, 2],
+                          modelName = "Prisoner's Dilemma outgroup")[2,]
+model4Frame <- data.frame(Variable = rownames(summary(model4)$coef),
+                          Coefficient = summary(model4)$coef[, 1],
+                          SE = summary(model4)$coef[, 2],
+                          modelName = "Dictator Game outgroup")[2,]
+model5Frame <- data.frame(Variable = rownames(summary(model5)$coef),
+                          Coefficient = summary(model5)$coef[, 1],
+                          SE = summary(model5)$coef[, 2],
+                          modelName = "Index")[2,]
+```
+
+```{r Tweaking?}
+
+# So now they want to put all those extracted models together
+# in one dataframe. Cool. Checks out. They're using rbind to do taht
+# giving them a numeric order, and then using factor to put them 
+# in the order that they want. Not really sure what levels() does, 
+# but it looks like it cleans up the variable names to make them 
+# easier to graph later. 
+
+
+allModelFrame <- data.frame(rbind(model1Frame, model2Frame, model3Frame, model4Frame, model5Frame))
+allModelFrame$Variable <- c(1,2,3,4, 5)
+allModelFrame$Variable <- factor(allModelFrame$Variable, 
+                                 labels=c("Prisoner's Dilemma  Ingroup", "Dictator Game  Ingroup", 
+                                          "Prisoner's Dilemma  Outgroup", "Dictator Game  Outgroup", 
+                                          "Prosociality  Index"))
+levels(allModelFrame$Variable) <- gsub("  ", "\n", levels(allModelFrame$Variable))
+```
+
+```{r Setting Confidence Intervals}
+
+# Okay so they want to set confidence intervals 
+# at 90% and 95%. Seems clear. 
+
+interval1 <- -qnorm((1-0.90)/2)  # 90% multiplier
+interval2 <- -qnorm((1-0.95)/2)  # 95% multiplier
+```
+
+```{r Colors}
+
+# They want all colors to be 00000, which is probably black right? 
+
+myColors <- c("#000000", "#000000", "#000000", "#000000", "#000000")
+```
+
+
+```{r Graphing Time}
+
+# I understand ggplot so this is cool. A bunch of detail stuff such
+# as adding a vertical dotted line at 0.00 mark. Then they make a 
+# horizontal linerange for every variable with thier ranges being
+# the SE * the confidence intervals calculated before. Then the points
+# show the mean effect which is the SE times the 95% CI with some cool
+# shapes added in for coolness. Switching up the y axis labels, setting
+# the theme, setting the colors, getting rid of the ticks, and generally
+# making things pretty. 
+
+figure5 <- ggplot(allModelFrame, aes(colour = as.factor(Variable))) + 
+  geom_hline(yintercept = 0, colour = gray(1/2), lty = 2) + 
+  geom_linerange(aes(x = Variable, 
+                     ymin = Coefficient - SE*interval1,
+                     ymax = Coefficient + SE*interval1),
+                     lwd = 1, position = position_dodge(width = 1/2)) + 
+  geom_pointrange(aes(x = Variable, y = Coefficient, 
+                      ymin = Coefficient - SE*interval2,
+                      ymax = Coefficient + SE*interval2),
+                      lwd = 1/4, position = position_dodge(width = 1/2),
+                      shape = 21, fill = "WHITE") + 
+  coord_flip(ylim = c(-0.8,0.2)) + 
+  scale_y_continuous(labels = c("-0.75", "-0.50", "-0.25", "0.00", "0.2")) +
+  theme_bw() + 
+  theme(legend.position="none") + 
+  ylab("")  + xlab("") +     
+  scale_color_manual(values=myColors) +   
+  theme(text = element_text(size=11), 
+        plot.title = element_text(size = 10, face = "bold"), 
+        plot.subtitle = element_text(size = 11, face = "italic")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+\begin{center}
+\textbf{Figure 5. Effect of Riot on Prosocial Behavior}
+
+```{r Output, fig.height = 3, fig.width = 3.5, fig.align="center"}
+
+# Ah here they want to show
+# the graph they made. I 
+# generally speaking understand 
+# figure 5. 
+
+figure5
+```
+
+\end{center}
+
+\begin{center}
+\includegraphics{Figure_5_Screenshot.PNG}
+\end{center}
+
 
