@@ -27,6 +27,31 @@ data <- table
 
 ```
 
+I will be replicating the paper "Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan" written by Anselm Hager, Krzysztof Krakowski, and Max Schaub.[^1] Using survey data performed in Osh, Kyrgyzstan after the 2010 ethnic riots, this paper explores the question of whether exposure to ethnic riots has a negative effect on both in and out group member prosocial behavior. Previous literature on prosocial behavior following ethnic violence suggests, intuitively, that prosocial behavior towards the aggressor group is negatively affected.[^2]  Some literature also suggests that prosocial behavior towards the in-group, or the victim group, should improve as a result of shared conflict.[^3]  This paper finds, however, that prosocial behavior for both in and out groups are negatively affected, which is supported by some less previous literature. [^4] 
+
+
+[^1]: Anselm Hager, Krzysztof Krakowski, and Max Schaub, “Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan,” American Political Science Review 113, no. 4 (2019): 1029–44.
+
+[^2]:
+
+[^3]:
+
+[^4]:
+
+
+The first step to understanding the data analysis performed in the following replication, is to become familiar with the event itself. The 2010 ethnic riots happened in Osh, Kyrgyzstan and were comprised of the ethnic Kyrgyz majority rioting against the ethnic Uzbek minority.[^5] The second step is to understand the author's data. They performed 1100 interviews with Uzbeks and Kyrgyz from Osh, Kyrgyzstan. View the graphic I have created below to see how the interview subjects differentiate between ethnicities, average ages, average incomes, gender, and number affected by riots.[^6].
+
+[^5]:
+
+[^6]: All analysis for this paper is available here: https://github.com/CianStryker/Project_5_Milestone
+
+After becoming familiar with the survey data, I will explain the analysis of the authors. The authors measure prosocial behavior by having subjects complete a prisoner's dilemma (PD) scenario and dictator’s game (DG) hypothetical to measure prosocial behavior towards both the in-group and out-group. They also create a ‘Prosociality Index’ score, which is simply a combined score of the PD and DG scores. They use these responses, which are measured numerically, to first run a series of OLS linear regressions for only Uzbeks who were affected by the riots, which is referred to as the victimization variable. They find that on average Uzbeks who were affected by the riots have lower prosocial behavior for both in and out-group members. They then run another series of regressions for affected Uzbeks, but include potential confounding variables such as wealth, state capacity of neighborhoods, community policing, accessibility, and voting record in the recent Kyrgyz election. They found, however, that only exposure to violence during the riots had consistently statistically significant effects on prosocial behavior. 
+
+The authors then want to explore an instrumental variable which was the rioter’s access to armored vehicles (APCs) to break through Uzbek barricades. During the riot, APCs were captured from the Kyrgyz military barracks by rioters to then attack Uzbek enclaves. Areas of Osh where rioters did not have access to APCs saw little to no destruction. This suggests that access to APCs might act as an exogenic assignment mechanism that explains post-riot differences across subject responses. They believe that distance to APC locations capture the ‘intent-to-treat’ effect and then create a closeness instrument by inputting subjects’ distance to APC locations. The authors run a series of new regressions where they substitute victimization for the closeness instrument and then include these regressions with their earlier, original regressions. They see both that their original results hold and that even with victimization replaced with the closeness instrument, there is still a noticeable negative effect on prosocial behavior. They follow this up with a randomization inference procedure, where they randomized potential APC locations, to see if the earlier closeness instrument effect could occur randomly. They find, however, that this is highly unlikely. 
+
+Overall the paper essentially finds that being affected by the riot causes a drop in prosocial behavior towards both the in-group and out-group. They then test the robustness of these results through potential confounding variables and an instrument variable. They find that their original findings hold throughout these robustness tests. At the end of the paper they explore why in-group prosocial behavior is negatively affected qualitatively and argue that disappointment and suspicion may explain the negatively affected in-group prosocial behavior.  
+
+
 
 I will be replicating the paper "Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan" written by Anselm Hager, Krzysztof Krakowski, and Max Schaub.[^1] Using survey data performed in Osh, Kyrgyzstan after the 2010 ethnic riots, this paper attempts to see if exposure to ethnic riots has a negative effect on both in and out group members. The literature on prosocial behavior following ethnic violence suggests that prosocial behavior towards the aggressor group is negatively affected. Some literature also suggests that prosocial behavior towards the in-group, or the victim group, should improve as a result of shared conflict. This paper finds, however, that prosocial behavior for both in and out groups are negatively affected.  The authors measure prosocial behavior by having subjects complete a prisoner's dilemma scenario and dictator game hypothetical that measure prosocial behavior. They use these responses in a series of regression to measure the average effect on prosocial behavior amongst subjects who were exposed to violence during the riots. They also pursue robust testing with an instrumental variable such as access to APC vehicles that allowed rioters to break through Uzbek barricades. This portion of the paper relies on geospatial data that is combined with the original testing within a series of regressions. The authors use robust statistical measures alongside geospatial data to identify inconsistencies within the literature regarding the effects of ethnic violence.
 
