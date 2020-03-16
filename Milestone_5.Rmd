@@ -1,0 +1,201 @@
+---
+title: 'Project Milestone #5'
+author: "Cian Stryker"
+date: "3/16/2020"
+output: pdf_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading all libraries
+# that I'll need. 
+
+library(gt)
+library(stargazer)
+library(tidyverse)
+```
+
+```{r Loading}
+
+# My loading code. 
+
+load("~/Replication_Project/Data/kyrgyzstan.RData")
+data <- table
+
+```
+
+
+I will be replicating the paper "Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan" written by Anselm Hager, Krzysztof Krakowski, and Max Schaub.[^1] Using survey data performed in Osh, Kyrgyzstan after the 2010 ethnic riots, this paper attempts to see if exposure to ethnic riots has a negative effect on both in and out group members. The literature on prosocial behavior following ethnic violence suggests that prosocial behavior towards the aggressor group is negatively affected. Some literature also suggests that prosocial behavior towards the in-group, or the victim group, should improve as a result of shared conflict. This paper finds, however, that prosocial behavior for both in and out groups are negatively affected.  The authors measure prosocial behavior by having subjects complete a prisoner's dilemma scenario and dictator game hypothetical that measure prosocial behavior. They use these responses in a series of regression to measure the average effect on prosocial behavior amongst subjects who were exposed to violence during the riots. They also pursue robust testing with an instrumental variable such as access to APC vehicles that allowed rioters to break through Uzbek barricades. This portion of the paper relies on geospatial data that is combined with the original testing within a series of regressions. The authors use robust statistical measures alongside geospatial data to identify inconsistencies within the literature regarding the effects of ethnic violence.
+
+[^1]: Anselm Hager, Krzysztof Krakowski, and Max Schaub, “Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan,” American Political Science Review 113, no. 4 (2019): 1029–44.
+
+The first step to understanding the data analysis performed in the following replication, is to become familiar with the event itself. The 2010 ethinc riots happened in Osh, Kyrgyzstan and were comprised of the ethnic Kyrgyz majority rioting against the ethnic Uzbek minority.[^2] The second step is to understand the author's data. They performed 1100 interviews with Uzbeks and Kyrgyz from Osh, Kyrgyzstan. View the table below to see how the interview subjects differentiate between ethnicites, average ages, average incomes, gender, and number affected by riots. 
+
+
+[^2]: Franco Galdini, “Kyrgyzstan Violence: Four Years On,” July 1, 2014, https://www.aljazeera.com/indepth/opinion/2014/06/kyrgyzstan-violence-2010-201463016460195835.html.
+
+\hfill\break
+```{r Step 1,  include=FALSE}
+
+# I want to grab some Uzbek data
+# and show the break down. SO I 
+# essentially just keep filtering
+# and summarizing my data into different
+
+uzbek <- data %>%
+  filter(ethnicity == "Uzbek") 
+uzbek_total <- uzbek %>%
+  summarize(Total = nrow(uzbek))
+uzbek_age <- uzbek %>%
+  summarize(Age = mean(age))
+uzbek_income <- uzbek %>%
+  summarize(Income = mean(income))
+
+uzbek_men <- uzbek %>%
+  filter(sex == 1) %>%
+  summarize(male = sum(sex)) %>%
+  summarize(Men = (male/878))
+
+uzbek_women <- uzbek %>%
+  filter(sex == 0) %>%
+  mutate(sex2 = sex + 1) %>%
+  summarize(female = sum(sex2)) %>%
+  summarize(Women = (female/878))
+
+uzbek_affected <- uzbek %>%
+  filter(affected == 1) %>%
+  summarize(Affected = sum(affected))
+
+uzbek_non_affected <- uzbek %>%
+  filter(affected == 0) %>%
+  mutate(affected2 = affected + 1) %>%
+  summarize(Unaffected = sum(affected2))
+
+uzbeks <- data.frame(uzbek_total, uzbek_age, uzbek_income, uzbek_men, uzbek_women, uzbek_affected, uzbek_non_affected) 
+
+uzbeks2 <- reshape2::melt(uzbeks)
+
+```
+
+
+```{r Step 2, include=FALSE}
+
+
+kyrgyz <- data %>%
+  filter(ethnicity == "Kyrgyz")
+
+kyrgyz_total <- kyrgyz %>%
+  summarize(Total = nrow(kyrgyz))
+
+kyrgyz_age <- kyrgyz %>%
+  summarize(Age = mean(age))
+
+kyrgyz_income <- kyrgyz %>%
+  summarize(Income = mean(income))
+
+kyrgyz_men <- kyrgyz %>%
+  filter(sex == 1) %>%
+  summarize(male = sum(sex)) %>%
+  summarize(Men = (male/222))
+
+kyrgyz_women <- kyrgyz %>%
+  filter(sex == 0) %>%
+  mutate(sex2 = sex + 1) %>%
+  summarize(female = sum(sex2)) %>%
+  summarize(Women = (female/222))
+
+kyrgyz_affected <- kyrgyz %>%
+  filter(affected == 1) %>%
+  summarize(Affected = sum(affected))
+
+kyrgyz_non_affected <- kyrgyz %>%
+  filter(affected == 0) %>%
+  mutate(affected2 = affected + 1) %>%
+  summarize(Unaffected = sum(affected2))
+
+
+kyrgyzz <- data.frame(kyrgyz_total, kyrgyz_age, kyrgyz_income, kyrgyz_men, kyrgyz_women, kyrgyz_affected, kyrgyz_non_affected)
+
+kyrgyz2 <- reshape2::melt(kyrgyzz)
+
+trial <- c("Total", "Average Age", "Average Income", "Percentage Men", "Percentage Women", "Number Affected", "Number Unaffected")
+
+```
+
+```{r Table 1}
+
+table_data <- data.frame(trial, uzbeks2, kyrgyz2)
+
+table_data2 <- data.frame(trial, table_data) %>%
+  select(trial, value, value.1) %>%
+  gt() %>%
+  fmt_number(columns = vars("value", "value.1"),
+             decimals = 0, use_seps = TRUE) %>%
+  cols_label("trial" = " ", "value" = "Uzbeks",
+             "value.1" = "Kyrgyz") %>%
+  fmt_percent(
+              columns = c("value", "value.1"),
+              rows = c(4, 5),
+              decimals = 0,
+              drop_trailing_zeros = FALSE,
+              use_seps = TRUE,
+              pattern = "{x}",
+              sep_mark = ",",
+              dec_mark = ".",
+              incl_space = FALSE,
+              placement = "right",
+              locale = NULL) %>%
+  tab_header(
+    title = "Table 1: Survey Data",
+    subtitle = "Separated between Uzbeks and Kyrgyz"
+  ) %>%
+  cols_align(align = c("center"), columns = TRUE)
+
+```
+
+```{r Table 1 Part 2}
+
+table_data2
+```
+
+
+
+\pagebreak
+
+
+\begin{center}
+ Bibliography
+\end{center}
+
+
+\begingroup
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+
+Galdini, Franco. “Kyrgyzstan Violence: Four Years On,” July 1, 2014. 
+https://www.aljazeera.com/indepth/opinion/2014/06/kyrgyzstan-violence-2010-201463016460195835.html.
+
+Hager, Anselm, Krzysztof Krakowski, and Max Schaub. “Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan.” American Political Science
+Review 113, no. 4 (2019): 1029–44.
+
+
+\endgroup
+
+
+\pagebreak
+
+
+\begin{center}
+ Appendix
+\end{center}
+
+
+dklasnddk
+
+```{r}
+table_data2
+```
+
