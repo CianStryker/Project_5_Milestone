@@ -27,40 +27,23 @@ data <- table
 
 ```
 
-I will be replicating the paper "Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan" written by Anselm Hager, Krzysztof Krakowski, and Max Schaub.[^1] Using survey data performed in Osh, Kyrgyzstan after the 2010 ethnic riots, this paper explores the question of whether exposure to ethnic riots has a negative effect on both in and out group member prosocial behavior. Previous literature on prosocial behavior following ethnic violence suggests, intuitively, that prosocial behavior towards the aggressor group is negatively affected.[^2]  Some literature also suggests that prosocial behavior towards the in-group, or the victim group, should improve as a result of shared conflict.[^3]  This paper finds, however, that prosocial behavior for both in and out groups are negatively affected, which is supported by some less previous literature. [^4] 
+I will be replicating the paper "Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan" written by Anselm Hager, Krzysztof Krakowski, and Max Schaub.[^1] Using survey data performed in Osh, Kyrgyzstan after the 2010 ethnic riots, this paper explores the question of whether exposure to ethnic riots has a negative effect on both in and out group member prosocial behavior. Previous literature on prosocial behavior following ethnic violence suggests, intuitively, that prosocial behavior towards the aggressor group is negatively affected.[^2] This paper's results, however, supports the work of other scholars who found that prosocial behavior for both in and out groups are negatively affected. [^3] 
 
 
-[^1]: Anselm Hager, Krzysztof Krakowski, and Max Schaub, “Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan,” American Political Science Review 113, no. 4 (2019): 1029–44.
+[^1]: Hager, Krakowski, and Schaub 2019
 
-[^2]:
+[^2]: Bauer et al. 2016; Horowitz 2001
 
-[^3]:
-
-[^4]:
-
-
-The first step to understanding the data analysis performed in the following replication, is to become familiar with the event itself. The 2010 ethnic riots happened in Osh, Kyrgyzstan and were comprised of the ethnic Kyrgyz majority rioting against the ethnic Uzbek minority.[^5] The second step is to understand the author's data. They performed 1100 interviews with Uzbeks and Kyrgyz from Osh, Kyrgyzstan. View the graphic I have created below to see how the interview subjects differentiate between ethnicities, average ages, average incomes, gender, and number affected by riots.[^6].
-
-[^5]:
-
-[^6]: All analysis for this paper is available here: https://github.com/CianStryker/Project_5_Milestone
-
-After becoming familiar with the survey data, I will explain the analysis of the authors. The authors measure prosocial behavior by having subjects complete a prisoner's dilemma (PD) scenario and dictator’s game (DG) hypothetical to measure prosocial behavior towards both the in-group and out-group. They also create a ‘Prosociality Index’ score, which is simply a combined score of the PD and DG scores. They use these responses, which are measured numerically, to first run a series of OLS linear regressions for only Uzbeks who were affected by the riots, which is referred to as the victimization variable. They find that on average Uzbeks who were affected by the riots have lower prosocial behavior for both in and out-group members. They then run another series of regressions for affected Uzbeks, but include potential confounding variables such as wealth, state capacity of neighborhoods, community policing, accessibility, and voting record in the recent Kyrgyz election. They found, however, that only exposure to violence during the riots had consistently statistically significant effects on prosocial behavior. 
-
-The authors then want to explore an instrumental variable which was the rioter’s access to armored vehicles (APCs) to break through Uzbek barricades. During the riot, APCs were captured from the Kyrgyz military barracks by rioters to then attack Uzbek enclaves. Areas of Osh where rioters did not have access to APCs saw little to no destruction. This suggests that access to APCs might act as an exogenic assignment mechanism that explains post-riot differences across subject responses. They believe that distance to APC locations capture the ‘intent-to-treat’ effect and then create a closeness instrument by inputting subjects’ distance to APC locations. The authors run a series of new regressions where they substitute victimization for the closeness instrument and then include these regressions with their earlier, original regressions. They see both that their original results hold and that even with victimization replaced with the closeness instrument, there is still a noticeable negative effect on prosocial behavior. They follow this up with a randomization inference procedure, where they randomized potential APC locations, to see if the earlier closeness instrument effect could occur randomly. They find, however, that this is highly unlikely. 
-
-Overall the paper essentially finds that being affected by the riot causes a drop in prosocial behavior towards both the in-group and out-group. They then test the robustness of these results through potential confounding variables and an instrument variable. They find that their original findings hold throughout these robustness tests. At the end of the paper they explore why in-group prosocial behavior is negatively affected qualitatively and argue that disappointment and suspicion may explain the negatively affected in-group prosocial behavior.  
+[^3]:Kijewski and Freitag 2018; Rohner, Thoenig, and Zilibotti 2013;
 
 
 
-I will be replicating the paper "Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan" written by Anselm Hager, Krzysztof Krakowski, and Max Schaub.[^1] Using survey data performed in Osh, Kyrgyzstan after the 2010 ethnic riots, this paper attempts to see if exposure to ethnic riots has a negative effect on both in and out group members. The literature on prosocial behavior following ethnic violence suggests that prosocial behavior towards the aggressor group is negatively affected. Some literature also suggests that prosocial behavior towards the in-group, or the victim group, should improve as a result of shared conflict. This paper finds, however, that prosocial behavior for both in and out groups are negatively affected.  The authors measure prosocial behavior by having subjects complete a prisoner's dilemma scenario and dictator game hypothetical that measure prosocial behavior. They use these responses in a series of regression to measure the average effect on prosocial behavior amongst subjects who were exposed to violence during the riots. They also pursue robust testing with an instrumental variable such as access to APC vehicles that allowed rioters to break through Uzbek barricades. This portion of the paper relies on geospatial data that is combined with the original testing within a series of regressions. The authors use robust statistical measures alongside geospatial data to identify inconsistencies within the literature regarding the effects of ethnic violence.
+The first step to understanding the data analysis performed in the following replication, is to become familiar with the event itself. The 2010 ethnic riots happened in Osh, Kyrgyzstan and were comprised of the ethnic Kyrgyz majority rioting against the ethnic Uzbek minority.[^4] The second step is to understand the author's data. They performed 1100 interviews with Uzbeks and Kyrgyz from Osh, Kyrgyzstan. View the graphic I have created below to see how the interview subjects differentiate between ethnicities, average ages, average incomes, gender, and number affected by riots.[^5]
 
-[^1]: Anselm Hager, Krzysztof Krakowski, and Max Schaub, “Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan,” American Political Science Review 113, no. 4 (2019): 1029–44.
+[^4]:Galdini 2014
 
-The first step to understanding the data analysis performed in the following replication, is to become familiar with the event itself. The 2010 ethinc riots happened in Osh, Kyrgyzstan and were comprised of the ethnic Kyrgyz majority rioting against the ethnic Uzbek minority.[^2] The second step is to understand the author's data. They performed 1100 interviews with Uzbeks and Kyrgyz from Osh, Kyrgyzstan. View the table below to see how the interview subjects differentiate between ethnicites, average ages, average incomes, gender, and number affected by riots. 
+[^5]: All analysis for this paper is available here: https://github.com/CianStryker/Project_5_Milestone
 
-
-[^2]: Franco Galdini, “Kyrgyzstan Violence: Four Years On,” July 1, 2014, https://www.aljazeera.com/indepth/opinion/2014/06/kyrgyzstan-violence-2010-201463016460195835.html.
 
 \hfill\break
 
@@ -70,6 +53,7 @@ The first step to understanding the data analysis performed in the following rep
 # and show the break down. SO I 
 # essentially just keep filtering
 # and summarizing my data into different
+# groups. 
 
 uzbek <- data %>%
   filter(ethnicity == "Uzbek") 
@@ -100,7 +84,11 @@ uzbek_non_affected <- uzbek %>%
   mutate(affected2 = affected + 1) %>%
   summarize(Unaffected = sum(affected2))
 
+# Then I make one big Uzbek data frame. 
+
 uzbeks <- data.frame(uzbek_total, uzbek_age, uzbek_income, uzbek_men, uzbek_women, uzbek_affected, uzbek_non_affected) 
+
+# And then I melt into the right format. 
 
 uzbeks2 <- reshape2::melt(uzbeks)
 
@@ -109,6 +97,8 @@ uzbeks2 <- reshape2::melt(uzbeks)
 
 ```{r Step 2, include=FALSE}
 
+# Same steps as before but now for Kyrgyz
+# instead of Uzbeks. 
 
 kyrgyz <- data %>%
   filter(ethnicity == "Kyrgyz")
@@ -142,10 +132,12 @@ kyrgyz_non_affected <- kyrgyz %>%
   mutate(affected2 = affected + 1) %>%
   summarize(Unaffected = sum(affected2))
 
-
 kyrgyzz <- data.frame(kyrgyz_total, kyrgyz_age, kyrgyz_income, kyrgyz_men, kyrgyz_women, kyrgyz_affected, kyrgyz_non_affected)
 
 kyrgyz2 <- reshape2::melt(kyrgyzz)
+
+# Only unqiue code here is to create better variable names
+# for my gt table.
 
 trial <- c("Total", "Average Age", "Average Income", "Percentage Men", "Percentage Women", "Number Affected", "Number Unaffected")
 
@@ -153,7 +145,14 @@ trial <- c("Total", "Average Age", "Average Income", "Percentage Men", "Percenta
 
 ```{r Table 1}
 
+# Now I mage my final data frame with 
+# both Uzbek and Kyrgyz data. 
+
 table_data <- data.frame(trial, uzbeks2, kyrgyz2)
+
+# And I use gt to make a great table with good
+# labels and that formats my numbers how I 
+# want them to be formatted. 
 
 table_data2 <- data.frame(trial, table_data) %>%
   select(trial, value, value.1) %>%
@@ -184,10 +183,18 @@ table_data2 <- data.frame(trial, table_data) %>%
 
 ```{r Table 1 Part 2}
 
+# Print the table. 
+
 table_data2
 ```
 
+\hfill\break
 
+In the authors' analyses they measure prosocial behavior by having subjects complete a prisoner's dilemma (PD) scenario and dictator’s game (DG) hypothetical to measure prosocial behavior towards both the in-group and out-group. They also create a ‘Prosociality Index’ score, which is simply a combined score of the PD and DG scores. They use these responses, which are measured numerically, to first run a series of OLS linear regressions for only Uzbeks who were affected by the riots, which is referred to as the victimization variable. They find that on average Uzbeks who were affected by the riots have lower prosocial behavior for both in and out-group members. They then run another series of regressions for affected Uzbeks, but include potential confounding variables such as wealth, state capacity of neighborhoods, community policing, accessibility, and voting record in the recent Kyrgyz election. They found, however, that only exposure to violence during the riots had consistently statistically significant effects on prosocial behavior. 
+
+The authors then want to explore an instrumental variable which was the rioter’s access to armored vehicles (APCs) to break through Uzbek barricades. During the riot, APCs were captured from the Kyrgyz military barracks by rioters to then attack Uzbek enclaves. Areas of Osh where rioters did not have access to APCs saw little to no destruction. This suggests that access to APCs might act as an exogenic assignment mechanism that explains post-riot differences across subject responses. They believe that distance to APC locations capture the ‘intent-to-treat’ effect and then create a closeness instrument by inputting subjects’ distance to APC locations. The authors run a series of new regressions where they substitute victimization for the closeness instrument and then include these regressions with their earlier, original regressions. They see both that their original results hold and that even with victimization replaced with the closeness instrument, there is still a noticeable negative effect on prosocial behavior. They follow this up with a randomization inference procedure, where they randomized potential APC locations, to see if the earlier closeness instrument effect could occur randomly. They find, however, that this is highly unlikely. 
+
+Overall the paper essentially finds that being affected by the riot causes a drop in prosocial behavior towards both the in-group and out-group. They then test the robustness of these results through potential confounding variables and an instrument variable. They find that their original findings hold throughout these robustness tests. At the end of the paper they explore why in-group prosocial behavior is negatively affected qualitatively and argue that disappointment and suspicion may explain the negatively affected in-group prosocial behavior.  
 
 \pagebreak
 
@@ -202,11 +209,19 @@ table_data2
 \setlength{\leftskip}{0.2in}
 \setlength{\parskip}{8pt}
 
-Galdini, Franco. “Kyrgyzstan Violence: Four Years On,” July 1, 2014. 
+Bauer, Michal, Christopher Blattman, Julie Chytilova, Joseph Henrich, Edward Miguel, and Tamar Mitts. 2016. “Can War Foster Cooperation.” The Journal of Economic Perspectives 30 (3): 249–74.
+
+Galdini, Franco. 2014. “Kyrgyzstan Violence: Four Years On.” July 1, 2014.
 https://www.aljazeera.com/indepth/opinion/2014/06/kyrgyzstan-violence-2010-201463016460195835.html.
 
-Hager, Anselm, Krzysztof Krakowski, and Max Schaub. “Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan.” American Political Science
-Review 113, no. 4 (2019): 1029–44.
+Hager, Anselm, Krzysztof Krakowski, and Max Schaub. 2019. “Ethnic Riots and Prosocial Behavior: Evidence from Kyrgyzstan.” American Political Science Review 113 (4): 1029–44.
+
+Horowitz, Donald L. 2001. The Deadly Ethnic Riot. Berkelely: University of California.
+
+Kijewski, Sara, and Markus Freitag. 2018. “Civil War and the Formation of Social Trust in Kosovo: Posttraumatic Growth or War-Related Distress?” Journal of Conflict Resolution 62 (4): 717–42.
+
+Rohner, Dominic, Mathias Thoenig, and Fabrizio Zilibotti. 2013. “Seeds of Distrust: Conflict in Uganda.” Journal of Economic Growth 18 (3): 217–52.
+
 
 
 \endgroup
@@ -221,8 +236,7 @@ Review 113, no. 4 (2019): 1029–44.
 
 ```{r Starting}
 
-# This seems like they're just shifting the
-# data they want to use later by making certain
+# Just shifting the data I  want to use later by making certain
 # columns integers, specifically the affected 
 # and prisoner dilemma columns. Oh and the affected
 # - 1 bit is to shift the binary from 1 and 0s to
@@ -236,8 +250,8 @@ data$pd_out <- as.integer(data$pd_out)
 
 ```{r Subset}
 
-# here they just want to grab their data for Uzbeks
-# as opposed to including the data for thier Kyrgyz 
+# Just want to grab the data for Uzbeks
+# as opposed to including the data for Kyrgyz 
 # respondents. 
 
 data_uzbek <- data[which(data$ethnicity=="Uzbek"),]
@@ -245,14 +259,9 @@ data_uzbek <- data[which(data$ethnicity=="Uzbek"),]
 
 ```{r Scaling Time}
 
-# Alright I had to find out what scale() does, but
-# apparently its a way of standardizing a bunch of 
-# data. The specifics are lost on my but the authors are 
-# scaling so that they can run regressions on the various 
-# in and out groups for the prisonners dilemma and dictator 
-# game results. They are also making an overall cooperation
-# index variable for later graphing, which they want to be 
-# on one standard scale, hence the scaling. 
+# Here I'm followig the author's code
+# and scaling all my variables before
+# making one combined variable. 
 
 data_uzbek$pd_in_scale <- scale(data_uzbek$pd_in)
 data_uzbek$dg_in_scale <- scale(data_uzbek$dg_in)
@@ -382,19 +391,25 @@ figure5 <- ggplot(allModelFrame, aes(colour = as.factor(Variable))) +
 ```
 
 \begin{center}
+\textbf{Figure 5 Replication}
+\end{center}
+
+\begin{center}
 \textbf{Figure 5. Effect of Riot on Prosocial Behavior}
 
 ```{r Output, fig.height = 3, fig.width = 3.5, fig.align="center"}
 
-# Ah here they want to show
-# the graph they made. I 
-# generally speaking understand 
-# figure 5. 
+# Printing the figure.
 
 figure5
 ```
 
 \end{center}
+
+\begin{center}
+\textbf{Original Figure 5}
+\end{center}
+
 
 \begin{center}
 \includegraphics{Figure_5_Screenshot.PNG}
