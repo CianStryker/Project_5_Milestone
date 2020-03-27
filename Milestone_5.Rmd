@@ -34,7 +34,7 @@ I will be replicating the paper "Ethnic Riots and Prosocial Behavior: Evidence f
 
 [^2]: Bauer et al. 2016; Horowitz 2001
 
-[^3]:Kijewski and Freitag 2018; Rohner, Thoenig, and Zilibotti 2013;
+[^3]:Kijewski and Freitag 2018; Rohner, Thoenig, and Zilibotti 2013
 
 
 
@@ -192,7 +192,7 @@ table_data2
 
 In the authors' analyses they measure prosocial behavior by having subjects complete a prisoner's dilemma (PD) scenario and dictator’s game (DG) hypothetical to measure prosocial behavior towards both the in-group and out-group. They also create a ‘Prosociality Index’ score, which is simply a combined score of the PD and DG scores. They use these responses, which are measured numerically, to first run a series of OLS linear regressions for only Uzbeks who were affected by the riots, which is referred to as the victimization variable. They find that on average Uzbeks who were affected by the riots have lower prosocial behavior for both in and out-group members. They then run another series of regressions for affected Uzbeks, but include potential confounding variables such as wealth, state capacity of neighborhoods, community policing, accessibility, and voting record in the recent Kyrgyz election. They found, however, that only exposure to violence during the riots had consistently statistically significant effects on prosocial behavior. 
 
-The authors then want to explore an instrumental variable which was the rioter’s access to armored vehicles (APCs) to break through Uzbek barricades. During the riot, APCs were captured from the Kyrgyz military barracks by rioters to then attack Uzbek enclaves. Areas of Osh where rioters did not have access to APCs saw little to no destruction. This suggests that access to APCs might act as an exogenic assignment mechanism that explains post-riot differences across subject responses. They believe that distance to APC locations capture the ‘intent-to-treat’ effect and then create a closeness instrument by inputting subjects’ distance to APC locations. The authors run a series of new regressions where they substitute victimization for the closeness instrument and then include these regressions with their earlier, original regressions. They see both that their original results hold and that even with victimization replaced with the closeness instrument, there is still a noticeable negative effect on prosocial behavior. They follow this up with a randomization inference procedure, where they randomized potential APC locations, to see if the earlier closeness instrument effect could occur randomly. They find, however, that this is highly unlikely. 
+The authors then want to explore an instrumental variable which was the distance between subjects and armored vehicles (APCs), which were captured from the Kyrgyz military by rioters and used to break through Uzbek barricades. Areas of Osh where rioters did not have access to APCs saw little to no destruction. This suggests that access to APCs might act as an exogenic assignment mechanism that explains post-riot differences across subject responses. They believe that distance to APC locations capture the ‘intent-to-treat’ effect and then create a closeness instrument by inputting subjects’ distance to APC locations. The authors run a series of new regressions where they substitute victimization for the closeness instrument. They see that their original results hold and can now say there is a causal negative impact on prosocial behavior. They follow this up with a randomization inference procedure, where they randomized potential APC locations, to see if the earlier closeness instrument effect could occur randomly. They find, however, that this is highly unlikely. 
 
 Overall the paper essentially finds that being affected by the riot causes a drop in prosocial behavior towards both the in-group and out-group. They then test the robustness of these results through potential confounding variables and an instrument variable. They find that their original findings hold throughout these robustness tests. At the end of the paper they explore why in-group prosocial behavior is negatively affected qualitatively and argue that disappointment and suspicion may explain the negatively affected in-group prosocial behavior.  
 
@@ -234,7 +234,7 @@ Rohner, Dominic, Mathias Thoenig, and Fabrizio Zilibotti. 2013. “Seeds of Dist
  Appendix
 \end{center}
 
-```{r Starting}
+```{r Figure 5}
 
 # Just shifting the data I  want to use later by making certain
 # columns integers, specifically the affected 
@@ -246,18 +246,14 @@ data$affected <- as.integer(data$affected)
 data$affected <- data$affected - 1
 data$pd_in <- as.integer(data$pd_in)
 data$pd_out <- as.integer(data$pd_out)
-```
 
-```{r Subset}
 
 # Just want to grab the data for Uzbeks
 # as opposed to including the data for Kyrgyz 
 # respondents. 
 
 data_uzbek <- data[which(data$ethnicity=="Uzbek"),]
-```
 
-```{r Scaling Time}
 
 # Here I'm followig the author's code
 # and scaling all my variables before
@@ -271,9 +267,7 @@ data_uzbek$cooperation_index <- rowSums(cbind(data_uzbek$pd_in_scale,
                                               data_uzbek$dg_in_scale, 
                                               data_uzbek$pd_out_scale, 
                                               data_uzbek$dg_out_scale), na.rm=T)/4
-```
 
-```{r Regressions}
 
 # Alright I totally understand what's happening here. 
 # They are just running an OLS regression on the variables
@@ -286,10 +280,7 @@ model2 <- lm(dg_in_scale ~ affected, data=data_uzbek)
 model3 <- lm(pd_out_scale ~ affected, data=data_uzbek)
 model4 <- lm(dg_out_scale ~ affected, data=data_uzbek)
 model5 <- lm(cooperation_index ~ affected, data=data_uzbek)
-```
 
-                                          
-```{r Regression Extraction}
 
 # This all makes sense too. After running the regressions 
 # the authors have 5 list type data, but they need to extract 
@@ -317,9 +308,7 @@ model5Frame <- data.frame(Variable = rownames(summary(model5)$coef),
                           Coefficient = summary(model5)$coef[, 1],
                           SE = summary(model5)$coef[, 2],
                           modelName = "Index")[2,]
-```
 
-```{r Tweaking?}
 
 # So now they want to put all those extracted models together
 # in one dataframe. Cool. Checks out. They're using rbind to do taht
@@ -336,26 +325,17 @@ allModelFrame$Variable <- factor(allModelFrame$Variable,
                                           "Prisoner's Dilemma  Outgroup", "Dictator Game  Outgroup", 
                                           "Prosociality  Index"))
 levels(allModelFrame$Variable) <- gsub("  ", "\n", levels(allModelFrame$Variable))
-```
 
-```{r Setting Confidence Intervals}
 
 # Okay so they want to set confidence intervals 
 # at 90% and 95%. Seems clear. 
 
 interval1 <- -qnorm((1-0.90)/2)  # 90% multiplier
 interval2 <- -qnorm((1-0.95)/2)  # 95% multiplier
-```
 
-```{r Colors}
-
-# They want all colors to be 00000, which is probably black right? 
+# They want all colors to be 00000. 
 
 myColors <- c("#000000", "#000000", "#000000", "#000000", "#000000")
-```
-
-
-```{r Graphing Time}
 
 # I understand ggplot so this is cool. A bunch of detail stuff such
 # as adding a vertical dotted line at 0.00 mark. Then they make a 
